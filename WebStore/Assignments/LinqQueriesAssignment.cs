@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebStore.Entities;
+using WebStore.Entities;
 
 namespace WebStore.Assignments
 {
@@ -22,11 +23,9 @@ namespace WebStore.Assignments
     public class LinqQueriesAssignment
     {
 
-        /* TODO: Uncomment this code after generating the entity models
+        private readonly WebstoreContext _dbContext;
 
-        private readonly WebStoreContext _dbContext;
-
-        public LinqQueriesAssignment(WebStoreContext context)
+        public LinqQueriesAssignment(WebstoreContext context)
         {
             _dbContext = context;
         }
@@ -72,8 +71,26 @@ namespace WebStore.Assignments
             // HINT: Use Include/ThenInclude or projection with .Select(...).
             //       Summing the quantities: order.OrderItems.Sum(oi => oi.Quantity).
 
-            Console.WriteLine(" ");
+        var orders = await _dbContext.Orders
+            .Include(o => o.Customer) // Include Customer details
+            .Include(o => o.OrderItems) // Include OrderItems to count them
+            .Select(o => new
+        {
+            OrderId = o.OrderId,
+            CustomerName = o.Customer.FirstName + " " + o.Customer.LastName,
+            OrderStatus = o.OrderStatus,
+            TotalItems = o.OrderItems.Sum(oi => oi.Quantity) // Sum all quantities
+        })
+        .ToListAsync();
+
             Console.WriteLine("=== TASK 02: List Orders With Item Count ===");
+
+            foreach (var order in orders)
+            {
+                Console.WriteLine($"Order ID: {order.OrderId}, Customer: {order.CustomerName}, Status: {order.OrderStatus}, Total Items: {order.TotalItems}");
+            }
+
+            Console.WriteLine(" ");
         }
 
         /// <summary>
@@ -85,8 +102,19 @@ namespace WebStore.Assignments
             // TODO: Write a query to fetch all products and sort them
             //       by descending price.
             // HINT: context.Products.OrderByDescending(p => p.Price)
+
+            var products = await _dbContext.Products
+               .ToListAsync();
+
             Console.WriteLine(" ");
             Console.WriteLine("=== Task 03: List Products By Descending Price ===");
+
+
+            foreach (var p in products)
+            {
+                Console.WriteLine($"{p.ProductName} - {p.Price}");
+            }
+
         }
 
         /// <summary>
@@ -212,6 +240,5 @@ namespace WebStore.Assignments
             Console.WriteLine(" ");
             Console.WriteLine("=== Task 10: Advanced Query Example ===");
         }
-        */
     }
 }
