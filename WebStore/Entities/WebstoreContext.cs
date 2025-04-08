@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-
 namespace WebStore.Entities;
-
 public partial class WebstoreContext : DbContext
 {
     public WebstoreContext()

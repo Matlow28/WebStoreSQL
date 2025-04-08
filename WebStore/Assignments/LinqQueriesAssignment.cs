@@ -50,8 +50,6 @@ namespace WebStore.Assignments
             {
                 Console.WriteLine($"{c.FirstName} {c.LastName} - {c.Email}");
             }
-
-
         }
 
         /// <summary>
@@ -209,9 +207,9 @@ namespace WebStore.Assignments
                 .Include(o => o.OrderItems)
                 .GroupBy(o => o.Customer)
                 .Select(g => new
-                 {
-                CustomerName = g.Key.FirstName + " " + g.Key.LastName,
-                TotalOrderValue = g.SelectMany(o => o.OrderItems)
+                {
+                    CustomerName = g.Key.FirstName + " " + g.Key.LastName,
+                    TotalOrderValue = g.SelectMany(o => o.OrderItems)
                                .Sum(oi => (oi.UnitPrice * oi.Quantity) - oi.Discount)
                 })
                 .OrderByDescending(x => x.TotalOrderValue)
