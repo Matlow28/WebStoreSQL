@@ -365,7 +365,6 @@ namespace WebStore.Assignments
                         }
                     }
                 }
-                Console.WriteLine();
             }
         }
     }
